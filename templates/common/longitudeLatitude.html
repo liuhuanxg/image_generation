@@ -1,0 +1,91 @@
+{% extends "base.html"%}
+{% load  static %}
+
+{% block title %}
+    经纬度信息
+{% endblock %}
+
+{% block style %}
+    <style>
+    .ul li{float: left;}
+    ul{height: 50px;}
+    </style>
+{% endblock %}
+
+{% block li %}
+<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">首页</span></a></li>
+<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/house_message" aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">房屋信息</span></a></li>
+<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/underground_message" aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">地下数据</span></a></li>
+<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu"></span>经纬度查看</a></li>
+<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">个人中心</span></a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">经纬度信息展示</h4>
+                        <h6 class="card-subtitle">这里展示已经在数据库中存储的经纬度信息</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">经度</th>
+                                    <th scope="col">纬度</th>
+                                    <th scope="col">房屋数量</th>
+                                    <th scope="col">地下数据信息</th>
+                                    <th scope="col">查看详情</th>
+                                    <th scope="col">操作</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for longitudelatitude in data %}
+                                <tr>
+                                    <th scope="row">{{ longitudelatitude.longitude }}</th>
+                                    <td>{{ longitudelatitude.latitude }}</td>
+                                    <td>{{ longitudelatitude.house_set.all.count }}</td>
+                                    <td>{{ longitudelatitude.underground_set.all.count }}</td>
+                                    <td><a href="/longitudelatitude_detail/{{ longitudelatitude.id }}" class="btn btn-sm btn-success">查看详情</a></td>
+                                    <td><a href="/delete_longitudelatitude/{{ longitudelatitude.id }}" class="btn btn-danger btn-sm">删除</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <ul class="list">
+           {% if data.has_previous %}
+            <a href="/longitudelatitude?page={{ data.previous_page_number }}" class="btn-sm btn">&lt;</a>
+            {% endif %}
+            {% for page in page_list %}
+                {% if request.GET.page %}
+                    {% if page == request.GET.page|add:0 %}
+                        <a href="/longitudelatitude?page={{ page }}" class="btn-sm btn-success btn">{{ page }}</a>
+                    {% elif  request.GET.page|add:0 > data.number and page == 1%}
+                        <a href="/longitudelatitude?page={{ page }}" class="btn-sm btn-success btn">{{ page }}</a>
+                    {% else %}
+                        <a href="/longitudelatitude?page={{ page }}" class="btn-sm btn">{{ page }}</a>
+                    {% endif %}
+                {% else %}
+                     {% if page == 1 %}
+                        <a href="/longitudelatitude?page={{ page }}" class="btn-sm btn-success btn">{{ page }}</a>
+                        {% else %}
+                        <a href="/longitudelatitude?page={{ page }}" class="btn-sm btn">{{ page }}</a>
+                     {% endif %}
+                {% endif %}
+            {% endfor %}
+             {% if data.has_next %}
+                <a href="/longitudelatitude?page={{ data.next_page_number }}" class="btn-sm btn">&gt;</a>
+             {% endif %}
+        </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

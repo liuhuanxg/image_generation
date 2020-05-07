@@ -1,0 +1,68 @@
+{% extends "base.html"%}
+{% load  static %}
+
+{% block title %}
+    编辑地下数据
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+    <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="card">
+            <div class="card-body">
+                <form class="form-horizontal form-material" method="post">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="id" value="{{ u.id }}">
+                    <div class="form-group">
+                        <label class="col-md-12">管道长度</label>
+                        <div class="col-md-12">
+                            <input type="number" required value="{{ u.conduit }}" name="conduit" class="form-control form-control-line">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-email" class="col-md-12">塌陷高度</label>
+                        <div class="col-md-12">
+                            <input type="number" required value="{{ u.collapse_height }}" name="collapse_height" class="form-control form-control-line" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12">地下建筑高度</label>
+                        <div class="col-md-12">
+                            <input type="number" required value="{{ u.underground_height }}" class="form-control form-control-line" name="underground_height">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12">所在经纬度</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-line" required name="longitudelatitude">
+                                {% for foo in l_lst %}
+                                    <option value="{{ foo.id }}"
+                                            {% if  foo.id == u.longitudelatitude_id%}selected{% endif %}>
+                                        {{ foo.longitude }}/{{ foo.latitude }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <button class="btn btn-success">更新数据</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
